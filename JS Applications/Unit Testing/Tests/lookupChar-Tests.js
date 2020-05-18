@@ -1,6 +1,5 @@
 const lookupChar = require('../CharLookup.js');
 let expect = require('chai').expect;
-let should = require('chai').should();
 
 describe("lookupChar", function () {
     it('with a non-string first parameter should return undefined', function () {
