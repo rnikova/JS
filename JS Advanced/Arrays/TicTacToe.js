@@ -22,55 +22,60 @@ function solve(input) {
         } else {
             console.log("This place is already taken. Please choose another!");
         }
-    }
 
-    for (let row = 0; row < dashboard.length; row++) {
-        if (dashboard[row].includes(false)) {
+        for (let i = 0; i < 3; i++) {
+            if ((dashboard[i][0] === player1 &&
+                    dashboard[i][1] === player1 &&
+                    dashboard[i][2] === player1) ||
+                (dashboard[i][0] === player2 &&
+                    dashboard[i][1] === player2 &&
+                    dashboard[i][2] === player2)) {
+                console.log(`Player ${dashboard[i][0]} wins!`)
+                printMatrix();
+                return;
+            } else if ((dashboard[0][i] === player1 &&
+                    dashboard[1][i] === player1 &&
+                    dashboard[2][i] === player1) ||
+                (dashboard[0][i] === player2 &&
+                    dashboard[1][i] === player2 &&
+                    dashboard[2][i] === player2)) {
+                console.log(`Player ${dashboard[0][i]} wins!`)
+                printMatrix();
+                return;
+            } else if (!dashboard[0].includes(false) &&
+                !dashboard[1].includes(false) &&
+                !dashboard[2].includes(false)) {
+                console.log("The game ended! Nobody wins :(");
+                printMatrix();
+                return;
+            }
+        }
+
+        if ((dashboard[0][0] === player1 &&
+                dashboard[1][1] === player1 &&
+                dashboard[2][2] === player1) ||
+            (dashboard[0][0] === player2 &&
+                dashboard[1][1] === player2 &&
+                dashboard[2][2] === player2)) {
+            console.log(`Player ${dashboard[1][1]} wins!`)
+            printMatrix();
+            return;
+        } else if ((dashboard[0][2] === player1 &&
+                dashboard[1][1] === player1 &&
+                dashboard[2][0] === player1) ||
+            (dashboard[0][2] === player2 &&
+                dashboard[1][1] === player2 &&
+                dashboard[2][0] === player2)) {
+            console.log(`Player ${dashboard[1][1]} wins!`)
+            printMatrix();
+            return;
+        } else if (!dashboard[0].includes(false) &&
+            !dashboard[1].includes(false) &&
+            !dashboard[2].includes(false)) {
             console.log("The game ended! Nobody wins :(");
             printMatrix();
             return;
         }
-    }
-    for (let i = 0; i < 3; i++) {
-        if ((dashboard[i][0] === player1 &&
-                dashboard[i][1] === player1 &&
-                dashboard[i][2] === player1) ||
-            dashboard[i][0] === player2 &&
-            dashboard[i][1] === player2 &&
-            dashboard[i][2] === player2) {
-            console.log(`Player ${dashboard[i][0]} wins!`)
-            printMatrix();
-            return;
-        } else if ((dashboard[0][i] === player1 &&
-            dashboard[1][i] === player1 &&
-            dashboard[2][i] === player1) ||
-            (dashboard[0][i] === player2 &&
-                dashboard[1][i] === player2 &&
-                dashboard[2][i] === player2)) {
-            console.log(`Player ${dashboard[0][i]} wins!`)
-            printMatrix();
-            return;
-        }
-    }
-
-    if ((dashboard[0][0] === player1 &&
-        dashboard[1][1] === player1 &&
-        dashboard[2][2] === player1) ||
-        (dashboard[0][0] === player2 &&
-            dashboard[1][1] === player2 &&
-            dashboard[2][2] === player2)) {
-        console.log(`Player ${dashboard[1][1]} wins!`)
-        printMatrix();
-        return;
-    } else if ((dashboard[0][2] === player1 &&
-        dashboard[1][1] === player1 &&
-        dashboard[2][0] === player1) ||
-        (dashboard[0][2] === player2 &&
-            dashboard[1][1] === player2 &&
-            dashboard[2][0] === player2)) {
-        console.log(`Player ${dashboard[1][1]} wins!`)
-        printMatrix();
-        return;
     }
 
     function printMatrix() {
@@ -79,14 +84,15 @@ function solve(input) {
         }
     }
 }
+
 solve(["0 1",
     "0 0",
     "0 2",
     "2 0",
     "1 0",
-    "1 1",
     "1 2",
-    "2 2",
+    "1 1",
     "2 1",
+    "2 2",
     "0 0"
 ])
