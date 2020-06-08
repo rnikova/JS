@@ -1,10 +1,10 @@
-class article{
+class Article{
     #comments;
     #likes;
     constructor(title, creator){
         this.title = title;
         this.creator = creator;
-        this.#comments = {};
+        this.#comments = [];
         this.#likes = new Set();
     }
 
@@ -12,16 +12,16 @@ class article{
         if(this.#likes === 0){
             return `${this.title} has 0 likes`;
         }else if(this.#likes.size === 1){
-            return `${[...this.#likes][0]} likes this article!`;
+            return `${Array.from(this.#likes)[0]} likes this article!`;
         }else{
-            return `${[...this.#likes][0]} and ${this.#likes.size - 1} others like this article!`;
+            return `${Array.from(this.#likes)[0]} and ${this.#likes.size - 1} others like this article!`;
         }
     }
 
     like (username){
         if(this.#likes.has(username)){
             throw new Error("You can't like the same article twice!");
-        }else if(this.creator == username){
+        }else if(this.creator === username){
             throw new Error("You can't like your own articles!");
         }else{
             this.#likes.add(username);
@@ -80,18 +80,18 @@ class article{
             result.push(`-- ${i + 1}. ${c.username}: ${c.content}`);
 
             for(let j = this.#comments[i].replies.length - 1; j >= 0; j--){
-                let r = this.comment[i].replies[j];
+                let r = this.#comments[i].replies[j];
                 result.push(`--- ${i + 1}.${j + 1} ${r.username}: ${r.content}`);
             }
         }
        }else{
-        let comments = this.#comments.splice();
-        comments.sort(app.comparator);
+        let comments = this.#comments.slice();
+        comments.sort(Article.comparator);
         comments.sort((a, b) => a.username.localeCompare(b.username));
         comments.forEach(c => {
             result.push(`-- ${c.id}. ${c.username}: ${c.content}`);
             let replies = c.replies.slice();
-            replies.sort(app.comparator);
+            replies.sort(Article.comparator);
             replies.forEach( r => {
                     result.push(`--- ${c.id}.${r.id} ${r.username}: ${r.content}`);
             })
