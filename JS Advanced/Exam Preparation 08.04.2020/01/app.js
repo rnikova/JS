@@ -20,9 +20,11 @@ function solve() {
             let greenBtn = document.createElement('button');
             greenBtn.className = 'green';
             greenBtn.textContent = 'Start';
+            greenBtn.addEventListener('click', InProgress);
             let redBtn = document.createElement('button');
             redBtn.className = 'red';
             redBtn.textContent = 'Delete';
+            redBtn.addEventListener('click', DeleteTask);
 
             divBtns.appendChild(greenBtn);
             divBtns.appendChild(redBtn);
@@ -34,4 +36,31 @@ function solve() {
         }
     }
 
+    function InProgress(e){
+        let inProgress = document.getElementById('in-progress');
+        let buttons = e.target.parentNode;
+        let orange = document.createElement('button');
+        orange.className = 'orange';
+        orange.textContent = 'Finish';
+        orange.addEventListener('click', Complete);
+        buttons.appendChild(orange);
+        let green = document.getElementsByClassName('green')[0];
+        e.target.parentNode.removeChild(green);
+        
+        inProgress.appendChild(buttons.parentNode);
+    }
+
+    function DeleteTask(e){
+        let article = e.target.parentNode.parentNode;
+        let open = e.target.parentNode.parentNode.parentNode;
+        open.removeChild(article);
+    }
+
+    function Complete(e){
+        let complete = document.querySelector('.green').parentNode.parentNode.children[1];
+        let article = e.target.parentNode.parentNode;
+        article.removeChild(e.target.parentNode);
+
+        complete.appendChild(article);
+    }
 }
