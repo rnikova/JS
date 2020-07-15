@@ -4,6 +4,7 @@ import {get, post, put, del} from '../requester.js';
 function saveAuthInfo(userInfo){
     sessionStorage.setItem('authtoken', userInfo._kmd.authtoken);
     sessionStorage.setItem('fullName', userInfo.firstName + ' ' + userInfo.lastName);
+    sessionStorage.setItem('userId', userInfo._id);
 }
 
 export function getRegister(ctx){
