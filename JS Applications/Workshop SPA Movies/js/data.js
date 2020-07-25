@@ -1,17 +1,13 @@
+import { beginRequest, endRequest } from './notification.js';
+
 function host(endpoint) {
     return `https://api.backendless.com/B1046723-1615-A9DA-FF72-043CA61B2C00/202648C4-C2EB-4502-8257-8960265F3775/${endpoint}`;
 }
 
-const endpoints = {
-    REGISTER: 'users/register',
-    LOGIN: 'users/login',
-    LOGOUT: 'users/logout',
-    MOVIES: 'data/movies',
-    MOVIE_BY_ID: 'data/movies/'
-};
+export async function register(username, password) {
+    beginRequest();
 
-async function register(username, password){
-    return (await fetch(host(endpoints.REGISTER), {
+    const result = (await fetch(host(endpoints.REGISTER), {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
@@ -21,10 +17,16 @@ async function register(username, password){
             password
         })
     })).json();
+
+    endRequest();
+
+    return result;
 }
 
-async function login(username, password){
-    const result = (await fetch(host(endpoints.LOGIN), {
+export async function login(username, password) {
+    beginRequest();
+
+    const result = await (await fetch(host(endpoints.LOGIN), {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
@@ -39,43 +41,77 @@ async function login(username, password){
     localStorage.setItem('username', result.username);
     localStorage.setItem('userId', result.objectId);
 
+    endRequest();
+
     return result;
 }
 
-function logout(){
+export async function logout() {
+    beginRequest();
+
     const token = localStorage.getItem('userToken');
 
-    return fetch(host(endpoints.LOGOUT), {
+    localStorage.removeItem('userToken');
+
+    const result = fetch(host(endpoints.LOGOUT), {
         headers: {
             'user-token': token
         }
     });
+
+    endRequest();
+
+    return result;
 }
 
-async function getMovies(){
+export async function getMovies(search) {
+    beginRequest();
+
     const token = localStorage.getItem('userToken');
 
-    return (await fetch(host(endpoints.MOVIES), {
+    let result;
+
+    if (!search) {
+        result = (await fetch(host(endpoints.MOVIES), {
+            headers: {
+                'user-token': token
+            }
+        })).json();
+    } else {
+        result = (await fetch(host(endpoints.MOVIES + `?where=${escape(`genres LIKE '%${search}%'`)}`), {
+            headers: {
+                'user-token': token
+            }
+        })).json();
+    }
+
+    endRequest();
+
+    return result;
+}
+
+export async function getMovieById(id) {
+    beginRequest();
+
+    const token = localStorage.getItem('userToken');
+
+    const result = (await fetch(host(endpoints.MOVIE_BY_ID + id), {
         headers: {
             'user-token': token
         }
     })).json();
+
+    endRequest();
+
+    return result;
 }
 
-async function getMovieById(){
+export async function createMovie(movie) {
+    beginRequest();
+
     const token = localStorage.getItem('userToken');
 
-    return (await fetch(host(endpoints.MOVIE_BY_ID + id), {
-        headers: {
-            'user-token': token
-        }
-    })).json();
-}
-
-async function createMovie(movie){
-    const token = localStorage.getItem('userToken');
-
-    return (await fetch(host(endpoints.MOVIES), {
+    const result = (await fetch(host(endpoints.MOVIES), {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -83,12 +119,18 @@ async function createMovie(movie){
         },
         body: JSON.stringify(movie)
     })).json();
+
+    endRequest();
+
+    return result;
 }
 
-async function updateMovie(id, updatedProps){
+export async function updateMovie(id, updatedProps) {
+    beginRequest();
+
     const token = localStorage.getItem('userToken');
 
-    return (await fetch(host(endpoints.MOVIE_BY_ID + id), {
+    const result = (await fetch(host(endpoints.MOVIE_BY_ID + id), {
         method: 'PUT',
         headers: {
             'Content-Type': 'application/json',
@@ -96,34 +138,51 @@ async function updateMovie(id, updatedProps){
         },
         body: JSON.stringify(updatedProps)
     })).json();
+
+    endRequest();
+
+    return result;
 }
 
-async function deleteMovie(id){
+export async function deleteMovie(id) {
+    beginRequest();
+
     const token = localStorage.getItem('userToken');
 
-    return (await fetch(host(endpoints.MOVIE_BY_ID + id), {
+    const result = (await fetch(host(endpoints.MOVIE_BY_ID + id), {
         method: 'DELETE',
-        headers: {
-            'Content-Type': 'application/json',
-            'user-token': token
-        },
-    })).json();
-}
-
-async function buyTicket(movie){
-    const newTickets = movie.tickets - 1;
-    const movieId = movie.objectId;
-
-    return updateMovie(movieId, {tickets: newTickets});
-}
-
-async function getMoviesByOwner(ownerId){
-    const token = localStorage.getItem('userToken');
-
-    return (await fetch(host(endpoints.MOVIES + `?where=ownerId%3D%27${ownerId}%27`), {
         headers: {
             'Content-Type': 'application/json',
             'user-token': token
         }
     })).json();
+
+    endRequest();
+
+    return result;
+}
+
+export async function getMovieByOwner() {
+    beginRequest();
+
+    const token = localStorage.getItem('userToken');
+    const ownerId = localStorage.getItem('userId');
+
+    const result = (await fetch(host(endpoints.MOVIES + `?where=ownerId%3D%27${ownerId}%27`), {
+        headers: {
+            'Content-Type': 'application/json',
+            'user-token': token
+        }
+    })).json();
+
+    endRequest();
+
+    return result;
+}
+
+export async function buyTicket(movie) {
+    const newTickets = movie.tickets - 1;
+    const movieId = movie.objectId;
+
+    return updateMovie(movieId, { tickets: newTickets });
 }
