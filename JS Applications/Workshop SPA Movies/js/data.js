@@ -4,6 +4,14 @@ function host(endpoint) {
     return `https://api.backendless.com/B1046723-1615-A9DA-FF72-043CA61B2C00/202648C4-C2EB-4502-8257-8960265F3775/${endpoint}`;
 }
 
+const endpoints = {
+    REGISTER: 'users/register',
+    LOGIN: 'users/login',
+    LOGOUT: 'users/logout',
+    MOVIES: 'data/movies',
+    MOVIE_BY_ID: 'data/movies/'
+}
+
 export async function register(username, password) {
     beginRequest();
 

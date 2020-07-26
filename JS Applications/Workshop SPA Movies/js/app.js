@@ -3,7 +3,7 @@ import home from './controllers/home.js';
 import register, { registerPost } from './controllers/register.js';
 import login, { loginPost } from './controllers/login.js';
 import logout from './controllers/logout.js';
-import catalog, { create, edit, details, createPost, buyTicket } from './controllers/movies.js';
+import catalog, { create, edit, details, createPost, buyTicket, myMovies, editPost, deleteMovie } from './controllers/movies.js';
 
 window.addEventListener('load', () => {
     const app = Sammy('#container', function(){
@@ -24,6 +24,7 @@ window.addEventListener('load', () => {
         this.get('#/logout', logout);
 
         this.get('#/catalog', catalog);
+        this.get('#/my_movies', myMovies);
         this.get('#/details/:id', details);
         this.get('#/create', create);
         this.get('#/edit/:id', edit);
@@ -33,6 +34,8 @@ window.addEventListener('load', () => {
 
         this.post('#/create', ctx => { createPost.call(ctx); });
         this.get('#/buy/:id', buyTicket);
+        this.post('#edit/:id', ctx => { editPost.call(ctx); });
+        this.get('#/delete/:id', deleteMovie);
     });
 
     app.run();
