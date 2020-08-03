@@ -1,24 +1,24 @@
 {{>header}}
-<form class="create-trek" action="#" method="post">
-
+{{#with trek}}
+<form class="create-trek" action="#/edit/{{objectId}}" method="post">
     <div class="form-label-group">
         <input type="text" name="location" class="form-control" placeholder="Location" required="" autofocus=""
-            value="">
+            value={{Location}}>
         <label for="inputTrekName">Location</label>
     </div>
 
     <div class="form-label-group">
-        <input type="text" value="" name="dateTime" class="form-control" placeholder="Date" required="">
+        <input type="text" value={{DepartureDate}} name="dateTime" class="form-control" placeholder="Date" required="">
         <label for="inputTrekDate">Date</label>
     </div>
 
     <div class="form-label-group">
-        <textarea type="text" name="description" class="form-control" placeholder="Description" required=""></textarea>
+        <textarea type="text" name="description" class="form-control" placeholder="Description" required="">{{Description}}</textarea>
         <label for="inputTrekDescription">Description</label>
     </div>
 
     <div class="form-label-group">
-        <input type="text" value="" name="imageURL" class="form-control" placeholder="Image" required="" autofocus="">
+        <input type="text" name="imageURL" class="form-control" placeholder="Image" required="" autofocus="" value="{{image}}">
         <label for="inputTrekImage">Image</label>
     </div>
     <div style="display: none">
@@ -27,5 +27,6 @@
     </div>
 
     <button class="btn btn-lg btn-dark btn-block" type="submit">Edit the trek</button>
+{{/with}}
 </form>
 {{>footer}}

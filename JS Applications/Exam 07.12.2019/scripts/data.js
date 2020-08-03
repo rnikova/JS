@@ -8,7 +8,8 @@ const endpoints = {
     REGISTER: 'users/register',
     LOGIN: 'users/login',
     LOGOUT: 'users/logout',
-    TREKS: 'data/treks'
+    TREKS: 'data/treks',
+    TREK_BY_ID: 'data/treks/'
 }
 
 export async function register(username, password) {
@@ -104,4 +105,64 @@ export async function request(trek) {
     endRequest();
 
     return result;
+}
+
+export async function getTrekById(id) {
+    beginRequest();
+
+    const token = localStorage.getItem('userToken');
+
+    const result = (await fetch(host(endpoints.TREK_BY_ID + id), {
+        headers: {
+            'user-token': token
+        }
+    })).json();
+
+    endRequest();
+
+    return result;
+}
+
+export async function edit(id, updatedProps) {
+    beginRequest();
+
+    const token = localStorage.getItem('userToken');
+
+    const result = (await fetch(host(endpoints.TREK_BY_ID + id), {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json',
+            'user-token': token
+        },
+        body: JSON.stringify(updatedProps)
+    })).json();
+
+    endRequest();
+
+    return result;
+}
+
+export async function deleteTrek(id) {
+    beginRequest();
+
+    const token = localStorage.getItem('userToken');
+
+    const result = (await fetch(host(endpoints.TREK_BY_ID + id), {
+        method: 'DELETE',
+        headers: {
+            'Content-Type': 'application/json',
+            'user-token': token
+        }
+    })).json();
+
+    endRequest();
+
+    return result;
+}
+
+export async function like(trek) {
+    const newLikes = trek.Likes + 1;
+    const trekId = trek.objectId;
+
+    return edit(trekId, { likes: newLikes });
 }
